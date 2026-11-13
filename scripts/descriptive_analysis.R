@@ -313,21 +313,6 @@ write.table(outliers_list, file = 'results/outliers_list.csv', sep = ';', row.na
 #                   BOX PLOTS                    #
 ##################################################
 
-#Standardized boxplots for each variable compared against loss
-box_standardized <- function() {
-  z <- scale(learning_loss[c(resp_var, core_vars)])
-  par(mar = c(7, 4, 4, 2))
-  boxplot(z, las = 2, col = c('orange', rep('lightblue', length(core_vars))),
-          ylab = 'standardized value', main = 'Distribution of factors that affected learning loss during COVID-19')
-  abline(h = 0, lty = 2)
-  for (i in 1:ncol(z)) {
-    out_idx <- which(is_outlier(z[, i]))
-    if (length(out_idx) > 0)
-      text(i, z[out_idx, i] + c(0.05, -0.05), rownames(z)[out_idx], pos = 4, cex = 0.55, col = 'red')
-  }
-  par(mar = c(5, 4, 4, 2) + 0.1)
-}
-
 #Learning loss in each region
 box_region <- function() {
   boxplot(loss ~ region_code, data = learning_loss, las = 1, cex.axis = 0.6,
@@ -354,11 +339,6 @@ box_income <- function(){
              method = 'jitter', pch = 16, cex=0.6,col="grey30",add = T)
   
 }
-
-#Distribution of the variables against loss
-png(filename = "results/plots/box_standardized.png",width = 14,height = 9,units = "in",res = 300)
-box_standardized()
-dev.off()
 
 #Distribution of loss in different regions
 png(filename = "results/plots/box_region.png",width = 14,height = 9,units = "in",res = 300)
